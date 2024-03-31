@@ -9,9 +9,54 @@ use App\Models\Food;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\OrderPlaced;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
+
+    public function sendOrderEmail(Request $request)
+    {
+        try {
+            // Parse JSON data from the request
+            $requestData = $request->all();
+            
+            // Process the data as per your requirements
+            // You can access user information and cart details from $requestData
+            
+            // Example:
+            $userId = $requestData['user']['id'];
+            $userName = $requestData['user']['name'];
+            $userEmail = $requestData['user']['email'];
+            $userPhone = $requestData['user']['phone'];
+            $cartItems = $requestData['cartItems']; // Adjusted to match the JSON structure
+            
+            // Logic to handle cart items
+            $cartItemsData = [];
+            foreach ($cartItems as $cartItem) {
+                // Process each cart item as needed
+                $cartItemsData[] = [
+                    'id' => $cartItem['id'],
+                    'name' => $cartItem['name'],
+                    'price' => $cartItem['price'],
+                    'quantity' => $cartItem['quantity']
+                    // Add other properties as needed
+                ];
+            }
+            
+            // Send email with order details
+            Mail::to('redaelhiri9@gmail.com')->send(new OrderPlaced($userName, $userEmail, $userPhone, $cartItemsData));
+            
+            // Return a response indicating success
+            return response()->json(['message' => 'Email sent successfully'], 200);
+        } catch (\Exception $e) {
+            // Return a response indicating failure with error message
+            return response()->json(['error' => 'Error sending email: ' . $e->getMessage()], 500);
+        }
+    }
+    
+
+
         public function place_order(Request $request)
     {
         $validator = Validator::make($request->all(), [

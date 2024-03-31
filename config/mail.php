@@ -32,7 +32,7 @@ return [
     |            "postmark", "log", "array", "failover", "roundrobin"
     |
     */
-
+    //ugog qrcb ogxv nocy
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',

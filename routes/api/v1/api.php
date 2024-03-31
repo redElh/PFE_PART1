@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Api\V1'], function () {
     
+    Route::post('send-order-email', 'OrderController@sendOrderEmail');
     //get products
        Route::group(['prefix' => 'products'], function () {
         Route::get('popular', 'ProductController@get_popular_products');
@@ -42,7 +43,8 @@ Route::group(['namespace' => 'Api\V1'], function () {
             Route::put('update/{id}', 'CustomerController@update_address');
             Route::delete('delete', 'CustomerController@delete_address');
         });
-                Route::group(['prefix' => 'order'], function () {
+        
+        Route::group(['prefix' => 'order'], function () {
             Route::get('list', 'OrderController@get_order_list');
             Route::get('running-orders', 'OrderController@get_running_orders');
             Route::get('details', 'OrderController@get_order_details');
